@@ -1,1 +1,12 @@
-site_name: My Docs
+site_name: Redteam Notes
+theme:
+  name: material
+  features:
+    - content.tabs.link  # Enable tab linking
+    - content.code.copy  # Optional: Adds "copy" button to code blocks
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
